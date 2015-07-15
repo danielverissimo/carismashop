@@ -5,15 +5,15 @@
  * integrating the billing forms with a Cielo's gateway Web Service.
  * Copyright (C) 2013  Fillipe Almeida Dutra
  * Belo Horizonte, Minas Gerais - Brazil
- * 
+ *
  * Contact: lawsann@gmail.com
  * Project link: http://code.google.com/p/magento-cielo/
  * Group discussion: http://groups.google.com/group/cielo-magento
- * 
- * Team: 
+ *
+ * Team:
  * Fillipe Almeida Dutra - lawsann@gmail.com
  * Hermes Luciano Monteiro Junior - hermeslmj@gmail.com
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -36,7 +36,7 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
     protected $_infoBlockType = 'Query_Cielo/info_cc';
     protected $_canUseInternal = true;
     protected $_canUseForMultishipping = false;
-    
+
     /**
      * Assign data to info model instance
      *
@@ -49,14 +49,14 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 		{
             $data = new Varien_Object($data);
         }
-        
+
 		// salva a bandeira, o numero de parcelas e o token
 		$info = $this->getInfoInstance();
         $additionaldata = array
         (
 			'parcels_number' => $data->getParcelsNumber()
 		);
-		
+
 		if($data->getToken())
 		{
 			$tokenData = $this->_getTokenById($data->getToken());
@@ -66,7 +66,7 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 
 		$ccNumberSize = strlen($data->getCcNumber());
 		$ccLast4 = substr($data->getCcNumber(), $ccNumberSize - 4, 4);
-		
+
 		$info->setCcType($data->getCcType())
 			 ->setCcNumber(Mage::helper('core')->encrypt($data->getCcNumber()))
 			 ->setCcOwner($data->getCcOwner())
@@ -76,13 +76,13 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 			 ->setCcLast4(Mage::helper('core')->encrypt($ccLast4))
 			 ->setCcCid(Mage::helper('core')->encrypt($data->getCcCid()))
 			 ->setAdditionalData(serialize($additionaldata));
-		
-		
+
+
 		// pega dados de juros
 		$withoutInterest = intval($this->getConfigData('installment_without_interest', $this->getStoreId()));
 		$interestValue = floatval($this->getConfigData('installment_interest_value', $this->getStoreId()));
-		
-		
+
+
 		// verifica se há juros
 		if($data->getParcelsNumber() > $withoutInterest)
 		{
@@ -96,21 +96,21 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 			{
 				$totalValue = $info->getQuote()->getGrandTotal();
 			}
-			
-			
+
+
 			$installmentValue = Mage::helper('Query_Cielo')->calcInstallmentValue
 								(
-									$totalValue, 
-									$interestValue / 100, 
+									$totalValue,
+									$interestValue / 100,
 									$data->getParcelsNumber()
 								);
-			
+
 			$installmentValue = round($installmentValue, 2);
 			$interest = ($installmentValue * $data->getParcelsNumber()) - $totalValue;
-			
+
 			$info->getQuote()->setInterest($info->getQuote()->getStore()->convertPrice($interest, false));
 			$info->getQuote()->setBaseInterest($interest);
-			
+
 			$info->getQuote()->setTotalsCollectedFlag(false)->collectTotals();
 			$info->getQuote()->save();
 		}
@@ -118,16 +118,16 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 		{
 			$info->getQuote()->setInterest(0.0);
 			$info->getQuote()->setBaseInterest(0.0);
-			
+
 			$info->getQuote()->setTotalsCollectedFlag(false)->collectTotals();
 			$info->getQuote()->save();
 		}
-		
-		
+
+
         return $this;
     }
-	
-	
+
+
 	/**
 	 * Valida dados
 	 *
@@ -140,15 +140,15 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 		 * chama validacao do metodo abstrato
 		 */
 		parent::validate();
-		
+
 		$info = $this->getInfoInstance();
 		$errorMsg = false;
-		
+
 		if($this->getConfigData('buypage', $this->getStoreId()) != "loja")
 		{
 			return $this;
 		}
-		
+
 		$additionalData = unserialize($info->getAdditionalData());
 
 		if(isset($additionalData['token']) && $additionalData['token'] != '')
@@ -157,7 +157,7 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 			if(!in_array($info->getCcType(), $availableTypes))
 			{
 				$errorMsg = Mage::helper('Query_Cielo')->__('Credit card type is not allowed for this payment method.');
-			}						
+			}
 		}
 		else
 		{
@@ -170,7 +170,7 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 			$info->setCcNumber(Mage::helper('core')->encrypt($ccNumber));
 
 			$ccType = '';
-			
+
 			// valida o numero do cartao de credito
 			if(in_array($info->getCcType(), $availableTypes))
 			{
@@ -239,7 +239,7 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 			{
 				$verificationRegEx = $this->getVerificationRegEx();
 				$regExp = isset($verificationRegEx[$info->getCcType()]) ? $verificationRegEx[$info->getCcType()] : '';
-				
+
 				if ($regExp != '' && (!$info->getCcCid() || !preg_match($regExp, Mage::helper('core')->decrypt($info->getCcCid()))))
 				{
 					$errorMsg = Mage::helper('Query_Cielo')->__('Please enter a valid credit card verification number.');
@@ -248,7 +248,7 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 
 			if (!$this->_validateExpDate($info->getCcExpYear(), $info->getCcExpMonth()))
 			{
-				
+
 				$errorMsg = Mage::helper('Query_Cielo')->__('Incorrect credit card expiration date.');
 			}
 
@@ -265,8 +265,8 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 		}
 		return $this;
 	}
-	
-	
+
+
 	/**
      * Validacao retirada do modelo cc da versao 1.7 do Magento
      *
@@ -306,17 +306,17 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
         /**
          * If the total has no remainder it's OK
          */
-        
+
         return ($numSum % 10 == 0);
     }
-    
-    
+
+
     /**
      * Expressao regular retirada do modelo cc da versao 1.7 do Magento
      *
      * @return  strig regExp
      */
-     
+
     public function getVerificationRegEx()
     {
         $verificationExpList = array
@@ -334,27 +334,27 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
         );
         return $verificationExpList;
     }
-    
-    
+
+
     /**
      * Validacao retirada do modelo cc da versao 1.7 do Magento
      *
      * @return  strig regExp
      */
-    
+
     protected function _validateExpDate($expYear, $expMonth)
     {
         $date = Mage::app()->getLocale()->date();
-        
+
         if (!$expYear || !$expMonth || ($date->compareYear($expYear) == 1)
             || ($date->compareYear($expYear) == 0 && ($date->compareMonth($expMonth) == 1)))
         {
             return false;
         }
-        
+
         return true;
     }
-    
+
     /**
      *  Getter da instancia do pedido
      *
@@ -363,7 +363,7 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
     public function getOrder()
     {
         if ($this->_order == null) {}
-		
+
         return $this->_order;
     }
 
@@ -388,9 +388,9 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
         }
         return $this;
     }
-	
+
 	/**
-     * Abre transacao com a Cielo para uma compra e redirectiona para a 
+     * Abre transacao com a Cielo para uma compra e redirectiona para a
      * pagina de pagamento na Cielo. Em caso de erro, redireciona para pagina
      * de erro.
      *
@@ -403,7 +403,7 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 		$storeId = $this->getStoreId();
 		$payment = $quote->getPayment();
 		$additionaldata = unserialize($payment->getData('additional_data'));
-		
+
 		// coleta os dados necessarios
 		$value 				= Mage::helper('Query_Cielo')->formatValueForCielo($quote->getGrandTotal());
 		$paymentType 		= $additionaldata["parcels_number"];
@@ -417,7 +417,10 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 
 		// cria instancia do pedido
 		$webServiceOrder = Mage::getModel('Query_Cielo/webServiceOrder', array('enderecoBase' => $environment, 'caminhoCertificado' => $sslFile));
-		
+
+        // Alteração no postbackURL
+        // Original: 'postbackURL'        => Mage::getUrl('querycielo/pay/verify'),
+        //
 		// preenche dados coletados
 		$webServiceOrderData = array
 		(
@@ -429,24 +432,24 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 			'generateToken'		=> 'false',
 			'clientOrderNumber'	=> $payment->getId(),
 			'clientOrderValue'	=> $value,
-			'postbackURL'		=> Mage::getUrl('querycielo/pay/verify'),
-			'clientSoftDesc'	=> $this->getConfigData('softdescriptor', $storeId)	
+			'postbackURL'		=> Mage::getUrl('checkout/onepage/success'),
+			'clientSoftDesc'	=> $this->getConfigData('softdescriptor', $storeId)
 		);
-		
+
 		// conforme mostrado no manual versao 2.5.1, pagina 13,
 		// caso o cartao seja Dinners, Discover, Elo, Amex,Aura ou JCB
 		// o valor do flag autorizar deve ser 3
-		if($ccType == "diners" 		|| 
-		   $ccType == "discover" 	|| 
-		   $ccType == "elo" 		|| 
+		if($ccType == "diners" 		||
+		   $ccType == "discover" 	||
+		   $ccType == "elo" 		||
 		   $ccType == "amex" 		||
-		   $ccType == "aura" 		|| 
+		   $ccType == "aura" 		||
 		   $ccType == "jcb" 		||
 		   !$this->getConfigData('autenticate', $storeId))
 		{
 			$webServiceOrderData['autorize'] = '3';
 		}
-		
+
 		if($paymentType == "1")
 		{
 			$webServiceOrderData['paymentType'] = $paymentType;
@@ -457,14 +460,14 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 			$webServiceOrderData['paymentType'] = $paymentParcels;
 			$webServiceOrderData['paymentParcels'] = $paymentType;
 		}
-		
+
 		// caso seja buy page loja, passa dados do cliente
 		if($this->getConfigData('buypage', $storeId) == "loja")
 		{
 			$ccExpMonth = $info->getCcExpMonth();
 			$ccExpMonth = ($ccExpMonth < 10) ? ("0" . $ccExpMonth) : $ccExpMonth;
 			$additionalData = unserialize($info->getAdditionalData());
-			
+
 			$ownerData = array
 			(
 				'number' 	=> Mage::helper('core')->decrypt($info->getCcNumber()),
@@ -472,7 +475,7 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 				'sec_code' 	=> Mage::helper('core')->decrypt($info->getCcCid()),
 				'name' 		=> $info->getCcOwner()
 			);
-			
+
 			// confere se ha utilizacao de tokens
 			if($this->getConfigData('tokenize', $storeId))
 			{
@@ -499,11 +502,11 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 		{
 			$ownerData = false;
 		}
-		
+
 		// faz a requisicao a cielo
 		$webServiceOrder->setData($webServiceOrderData);
 		$redirectUrl = $webServiceOrder->requestTransaction($ownerData);
-		
+
 
 		// caso volte um token, armazena-o para um usuario
 		$this->_saveNewToken
@@ -512,10 +515,10 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 			$quote->getCustomerId(),
 			$ccType
 		);
-		
-		
+
+
 		Mage::getSingleton('core/session')->setData('cielo-transaction', $webServiceOrder);
-		
+
 		if($redirectUrl == false)
 		{
 			// caso nao haja autenticacao, enviar para o tratamento final do pedido
@@ -534,24 +537,24 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 			return $redirectUrl;
 		}
     }
-	
+
 	private function _getToken($customerId, $ccType, $ccNumber)
 	{
 		$resource = Mage::getSingleton('core/resource');
 		$readConnection = $resource->getConnection('core_read');
-		
+
 		$tablePrefix = (string) Mage::getConfig()->getTablePrefix();
 		if($tablePrefix)
 		{
 			$tablePrefix = "_" . $tablePrefix;
 		}
-		
+
 		$last4ccNumbers = substr($ccNumber,(strlen($ccNumber) - 4), 4);
-		
-		$sql = "SELECT token FROM " . $tablePrefix . "query_cielo_customer_token WHERE customer_id=" . $customerId . " AND " . 
+
+		$sql = "SELECT token FROM " . $tablePrefix . "query_cielo_customer_token WHERE customer_id=" . $customerId . " AND " .
 				"cc_type='" . $ccType . "' AND last_digits ='" . Mage::Helper('core')->encrypt($last4ccNumbers) . "'";
 		$result = $readConnection->fetchCol($sql);
-		
+
 		// verifica se o cliente tem token
 		if(!$result || count($result) != 1)
 		{
@@ -562,17 +565,17 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 			return $result[0];
 		}
 	}
-	
+
 	private function _saveNewToken($responseXml, $customerId, $ccType)
 	{
 		$tokenDataTag = "dados-token";
 		$codeTag = "codigo-token";
 		$cardNumberTag = "numero-cartao-truncado";
-		
+
 		// confere se houve geracao de token
-		if( !$responseXml || 
-			!$responseXml->token || 
-			!$responseXml->token->$tokenDataTag || 
+		if( !$responseXml ||
+			!$responseXml->token ||
+			!$responseXml->token->$tokenDataTag ||
 			!$responseXml->token->$tokenDataTag->$codeTag ||
 			!$responseXml->token->$tokenDataTag->$cardNumberTag ||
 			!$responseXml->token->$tokenDataTag->status ||
@@ -580,11 +583,11 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 		{
 			return;
 		}
-		
+
 		$token = (string) $responseXml->token->$tokenDataTag->$codeTag;
 		$cardNumber = (string) $responseXml->token->$tokenDataTag->$cardNumberTag;
 		$lastDigits = Mage::Helper('core')->encrypt(substr($cardNumber, (strlen($cardNumber) - 4), 4));
-		
+
 		// insere dados no banco
 		$resource = Mage::getSingleton('core/resource');
        	$writeConnection = $resource->getConnection('core_write');
@@ -593,31 +596,31 @@ class Query_Cielo_Model_Cc extends Query_Cielo_Model_Abstract
 		{
 			$tablePrefix = "_" . $tablePrefix;
 		}
-		$sql = "INSERT INTO `" . $tablePrefix . "query_cielo_customer_token`" . 
-				"	(`customer_id`,`token`,`cc_type`,`last_digits`) " . 
-				"VALUES " . 
+		$sql = "INSERT INTO `" . $tablePrefix . "query_cielo_customer_token`" .
+				"	(`customer_id`,`token`,`cc_type`,`last_digits`) " .
+				"VALUES " .
 				"	(". $customerId .",'" . $token . "','" . $ccType . "','" . $lastDigits . "')";
-		
+
 		$writeConnection->query($sql);
-		
+
 		$additionalData = unserialize($this->getInfoInstance()->getAdditionalData());
 		$additionalData["token"] = $token;
 		$this->getInfoInstance()->setAdditionalData(serialize($additionalData));
 		$this->getInfoInstance()->save();
 	}
-	
+
 	private function _getTokenById($tokenString)
 	{
 
 		$quote = $this->getInfoInstance()->getQuote();
 		$tokenData = explode("/", $tokenString, 2);
-		
+
 		$tablePrefix = (string) Mage::getConfig()->getTablePrefix();
 		if($tablePrefix)
 		{
 			$tablePrefix = "_" . $tablePrefix;
 		}
-		
+
 		$readConnection = Mage::getSingleton('core/resource')->getConnection('core_read');
 		$query = "SELECT token FROM " . $tablePrefix . "query_cielo_customer_token WHERE token_id=" . $tokenData[1] ." AND customer_id = ".$quote->getCustomerId();
 		$returnValues = array();

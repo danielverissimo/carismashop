@@ -5,15 +5,15 @@
  * integrating the billing forms with a Cielo's gateway Web Service.
  * Copyright (C) 2013  Fillipe Almeida Dutra
  * Belo Horizonte, Minas Gerais - Brazil
- * 
+ *
  * Contact: lawsann@gmail.com
  * Project link: http://code.google.com/p/magento-cielo/
  * Group discussion: http://groups.google.com/group/cielo-magento
- * 
- * Team: 
+ *
+ * Team:
  * Fillipe Almeida Dutra - lawsann@gmail.com
  * Hermes Luciano Monteiro Junior - hermeslmj@gmail.com
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -36,7 +36,7 @@ class Query_Cielo_Model_Dc extends Query_Cielo_Model_Abstract
     protected $_infoBlockType = 'Query_Cielo/info_dc';
     protected $_canUseInternal = true;
     protected $_canUseForMultishipping = false;
-    
+
     /**
      * Assign data to info model instance
      *
@@ -49,10 +49,10 @@ class Query_Cielo_Model_Dc extends Query_Cielo_Model_Abstract
 		{
             $data = new Varien_Object($data);
         }
-        
+
         // salva a bandeira
 		$info = $this->getInfoInstance();
-		
+
 		// converte nomenclatura da bandeira
 		if($data->getDcType() == "visa-electron")
 		{
@@ -72,7 +72,7 @@ class Query_Cielo_Model_Dc extends Query_Cielo_Model_Abstract
 
 		$dcNumberSize = strlen($data->getDcNumber());
 		$dcLast4 = substr($data->getDcNumber(), $dcNumberSize - 4, 4);
-		
+
 		$info->setCcType($cardType)
 			 ->setCcNumber(Mage::helper('core')->encrypt($data->getDcNumber()))
 			 ->setCcOwner($data->getDcOwner())
@@ -81,11 +81,11 @@ class Query_Cielo_Model_Dc extends Query_Cielo_Model_Abstract
 			 ->setCcOwnerDoc($data->getDcOwnerDoc())
 			 ->setCcLast4(Mage::helper('core')->encrypt($dcLast4))
 			 ->setCcCid(Mage::helper('core')->encrypt($data->getDcCid()));
-		
+
         return $this;
     }
-	
-	
+
+
 	/**
 	 * Valida dados
 	 *
@@ -98,15 +98,15 @@ class Query_Cielo_Model_Dc extends Query_Cielo_Model_Abstract
 		 * chama validacao do metodo abstrato
 		 */
 		parent::validate();
-		
+
 		if($this->getConfigData('buypage', $this->getStoreId()) != "loja")
 		{
 			return $this;
 		}
-		
+
 		$info = $this->getInfoInstance();
 		$errorMsg = false;
-		
+
 		$availableTypes = Mage::getModel('Query_Cielo/dc_types')->getCodes();
 		$ccNumber = Mage::helper('core')->decrypt($info->getCcNumber());
 
@@ -115,7 +115,7 @@ class Query_Cielo_Model_Dc extends Query_Cielo_Model_Abstract
 		$info->setCcNumber(Mage::helper('core')->encrypt($ccNumber));
 
 		$ccType = '';
-		
+
 		// valida o numero do cartao de credito
 		if(in_array($info->getCcType(), $availableTypes))
 		{
@@ -182,7 +182,7 @@ class Query_Cielo_Model_Dc extends Query_Cielo_Model_Abstract
 		{
 			$verificationRegEx = $this->getVerificationRegEx();
 			$regExp = isset($verificationRegEx[$info->getCcType()]) ? $verificationRegEx[$info->getCcType()] : '';
-			
+
 			if ($regExp != '' && (!$info->getCcCid() || !preg_match($regExp, Mage::helper('core')->decrypt($info->getCcCid()))))
 			{
 				$errorMsg = Mage::helper('Query_Cielo')->__('Please enter a valid credit card verification number.');
@@ -207,8 +207,8 @@ class Query_Cielo_Model_Dc extends Query_Cielo_Model_Abstract
 
 		return $this;
 	}
-	
-	
+
+
 	/**
      * Validacao retirada do modelo cc da versao 1.7 do Magento
      *
@@ -248,17 +248,17 @@ class Query_Cielo_Model_Dc extends Query_Cielo_Model_Abstract
         /**
          * If the total has no remainder it's OK
          */
-        
+
         return ($numSum % 10 == 0);
     }
-    
-    
+
+
     /**
      * Expressao regular retirada do modelo cc da versao 1.7 do Magento
      *
      * @return  strig regExp
      */
-     
+
     public function getVerificationRegEx()
     {
         $verificationExpList = array
@@ -275,30 +275,30 @@ class Query_Cielo_Model_Dc extends Query_Cielo_Model_Abstract
         );
         return $verificationExpList;
     }
-    
-    
+
+
     /**
      * Validacao retirada do modelo cc da versao 1.7 do Magento
      *
      * @return  strig regExp
      */
-    
+
     protected function _validateExpDate($expYear, $expMonth)
     {
         $date = Mage::app()->getLocale()->date();
-        
+
 		if (!$expYear || !$expMonth || ($date->compareYear($expYear) == 1)
             || ($date->compareYear($expYear) == 0 && ($date->compareMonth($expMonth) == 1)))
         {
             return false;
         }
-        
+
         return true;
     }
-	
-	
-	
-    
+
+
+
+
     /**
      *  Getter da instancia do pedido
      *
@@ -307,7 +307,7 @@ class Query_Cielo_Model_Dc extends Query_Cielo_Model_Abstract
     public function getOrder()
     {
         if ($this->_order == null) {}
-		
+
         return $this->_order;
     }
 
@@ -332,8 +332,8 @@ class Query_Cielo_Model_Dc extends Query_Cielo_Model_Abstract
         }
         return $this;
     }
-    
-	
+
+
 	/**
      * Formata o valor da compra de acordo com a definicao da Cielo
      *
@@ -357,10 +357,13 @@ class Query_Cielo_Model_Dc extends Query_Cielo_Model_Abstract
 		$cieloKey 			= $this->getConfigData('cielo_key', $storeId);
 		$environment 		= $this->getConfigData('environment', $storeId);
 		$sslFile	 		= $this->getConfigData('ssl_file', $storeId);
-		
+
 		// cria instancia do pedido
 		$webServiceOrder = Mage::getModel('Query_Cielo/webServiceOrder', array('enderecoBase' => $environment, 'caminhoCertificado' => $sslFile));
-		
+
+        // Alteração no postbackURL
+        // Original: 'postbackURL'        => Mage::getUrl('querycielo/pay/verify'),
+
 		// preenche dados coletados
 		$webServiceOrderData = array
 		(
@@ -371,21 +374,21 @@ class Query_Cielo_Model_Dc extends Query_Cielo_Model_Abstract
 			'autorize'			=> '1',
 			'clientOrderNumber'	=> $payment->getId(),
 			'clientOrderValue'	=> $value,
-			'postbackURL'		=> Mage::getUrl('querycielo/pay/verify'),
+			'postbackURL'		=> Mage::getUrl('checkout/onepage/success'),
 			'paymentType'		=> 'A',
 			'paymentParcels'	=> 1,
 			'clientSoftDesc'	=> $this->getConfigData('softdescriptor', $storeId),
 			'generateToken'		=> 'false',
 		);
-		
+
 		$webServiceOrder->setData($webServiceOrderData);
-		
+
 		// caso seja buy page loja, passa dados do cliente
 		if($this->getConfigData('buypage', $storeId) == "loja")
 		{
 			$ccExpMonth = $info->getCcExpMonth();
 			$ccExpMonth = ($ccExpMonth < 10) ? ("0" . $ccExpMonth) : $ccExpMonth;
-			
+
 			$ownerData = array
 			(
 				'number' 	=> Mage::helper('core')->decrypt($info->getCcNumber()),
@@ -398,10 +401,10 @@ class Query_Cielo_Model_Dc extends Query_Cielo_Model_Abstract
 		{
 			$ownerData = false;
 		}
-		
+
 		$redirectUrl = $webServiceOrder->requestTransaction($ownerData);
 		Mage::getSingleton('core/session')->setData('cielo-transaction', $webServiceOrder);
-		
+
 		if($redirectUrl == false)
 		{
 			// caso nao haja autenticacao, enviar para o tratamento final do pedido
