@@ -1,0 +1,591 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Solide Webservices
+ * @package     CustomSuccessPage
+ */
+-->
+<config>
+	<tabs>
+		<solidewebservices translate="label">
+			<label>Solide Webservices</label>
+			<sort_order>200</sort_order>
+		</solidewebservices>
+	</tabs>
+	<sections>
+		<customsuccesspage translate="label" module="customsuccesspage">
+			<label>Custom Success Page</label>
+			<tab>solidewebservices</tab>
+			<frontend_type>text</frontend_type>
+			<sort_order>100</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>1</show_in_website>
+			<show_in_store>1</show_in_store>
+			<groups>
+				<configuration translate="label">
+					<label>Configuration</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>100</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<enabled translate="label">
+							<label>Enable Extension</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>120</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</enabled>
+						<enable_jquery translate="label">
+							<label>Enable jQuery</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>121</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								 <enabled>1</enabled>
+							</depends>
+						</enable_jquery>
+						<version_jquery translate="label">
+							<label>jQuery Version To Load</label>
+							<frontend_type>select</frontend_type>
+							<source_model>customsuccesspage/config_source_jquery</source_model>
+							<sort_order>122</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								 <enabled>1</enabled>
+								 <enable_jquery>1</enable_jquery>
+							</depends>
+						</version_jquery>
+						<jquery_noconflictmode translate="label">
+							<label>Load jQuery In No Conflict Mode</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>123</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								 <enabled>1</enabled>
+								 <enable_jquery>1</enable_jquery>
+							</depends>
+						</jquery_noconflictmode>
+						<jquery_position translate="label comment">
+							<label>Try Loading Javascript Before/After All Other Scripts </label>
+							<comment><![CDATA[If you experience javascript conflicts it can help to reorder the javascripts. If this will actually help is based on your custom theme.]]></comment>
+							<frontend_type>select</frontend_type>
+							<source_model>customsuccesspage/config_source_jqueryposition</source_model>
+							<sort_order>124</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								 <enabled>1</enabled>
+								 <enable_jquery>1</enable_jquery>
+							</depends>
+						</jquery_position>
+					</fields>
+				</configuration>
+				<general translate="label">
+					<label>General Settings</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>200</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<pagetitle translate="label comment">
+							<label>Success Page Title</label>
+							<comment><![CDATA[if left empty the default page title will be used]]></comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>201</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</pagetitle>
+						<intro translate="label comment">
+							<label>Success Page Intro Text</label>
+							<comment><![CDATA[if left empty the default success page intro text will be used, you can use the following tags which will be replaced with the corresponding data: {{website}}, {{order_date}}, {{order_number}}, {{order_trackingnumber}}, {{customer_firstname}}, {{customer_middlename}}, {{customer_lastname}}, {{customer_fullname}}]]></comment>
+							<frontend_type>editor</frontend_type>
+							<frontend_model>customsuccesspage/adminhtml_system_config_editor</frontend_model>
+							<sort_order>202</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</intro>
+						<print_order translate="label">
+							<label>Show Print Order Icon</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>203</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</print_order>
+						<continue_url translate="label comment">
+							<label>Link Of The Continue Shopping Button</label>
+							<comment><![CDATA[if left empty the default url (the homepage) will be used]]></comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>204</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</continue_url>
+						<summary_block translate="label comment">
+							<label>Select Summary Block</label>
+							<comment><![CDATA[select block to show at the top right of the custom success page]]></comment>
+							<frontend_type>select</frontend_type>
+							<source_model>customsuccesspage/config_source_cmsblock</source_model>
+							<sort_order>205</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<validate>required-entry</validate>
+						</summary_block>
+						<show_order_number translate="label">
+							<label>Show Order Number</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>206</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<summary_block>summary</summary_block>
+							</depends>
+						</show_order_number>
+					</fields>
+				</general>
+				<newsletter translate="label">
+					<label>Newsletter</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>300</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<newsletter_show translate="label comment">
+							<label>Show Newsletter Subscription</label>
+							<comment><![CDATA[this shows the newsletter subscription field below the success page intro tekst]]></comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>301</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</newsletter_show>
+						<newsletter_position translate="label">
+							<label>Location Newsletter Subscription</label>
+							<frontend_type>select</frontend_type>
+							<source_model>customsuccesspage/config_source_newsletter</source_model>
+							<sort_order>302</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								 <newsletter_show>1</newsletter_show>
+							</depends>
+						</newsletter_position>
+						<newsletter_intro translate="label comment">
+							<label>Newsletter Subscription Text</label>
+							<comment><![CDATA[if left empty the default newsletter subscription text will be used]]></comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>303</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								 <newsletter_show>1</newsletter_show>
+							</depends>
+						</newsletter_intro>
+					</fields>
+				</newsletter>
+				<ordered translate="label">
+					<label>Ordered Items Section</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>400</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<items_ordered_sort translate="label">
+							<label>Section Sort Order</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>401</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<validate>validate-number required-entry</validate>
+						</items_ordered_sort>
+						<items_ordered translate="label">
+							<label>Show Ordered Items</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>402</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</items_ordered>
+						<items_ordered_title translate="label comment">
+							<label>Ordered Items Section Title</label>
+							<comment><![CDATA[if left empty the default ordered items title will be used]]></comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>403</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								 <items_ordered>1</items_ordered>
+							</depends>
+						</items_ordered_title>
+						<items_ordered_totals translate="label">
+							<label>Show Ordered Items Grand Totals</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>404</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								 <items_ordered>1</items_ordered>
+							</depends>
+						</items_ordered_totals>
+					</fields>
+				</ordered>
+				<related translate="label">
+					<label>Related Products Section</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>500</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<related_products_sort translate="label">
+							<label>Section Sort Order</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>501</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<validate>validate-number required-entry</validate>
+						</related_products_sort>
+						<related_products translate="label">
+							<label>Show Related and/or Cross-Sell Products Section</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>502</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</related_products>
+						<related_products_title translate="label comment">
+							<label>Related Products Section Title</label>
+							<comment><![CDATA[if left empty the default related products title will be used]]></comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>503</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								 <related_products>1</related_products>
+							</depends>
+						</related_products_title>
+						<related_products_type translate="label">
+							<label>Show Related and/or Cross Sell Products</label>
+							<frontend_type>select</frontend_type>
+							<source_model>customsuccesspage/config_source_related</source_model>
+							<sort_order>504</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								 <related_products>1</related_products>
+							</depends>
+						</related_products_type>
+						<related_products_number translate="label">
+							<label>Number Of Related Products To Show</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>505</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<related_products>1</related_products>
+							</depends>
+							<validate>validate-number</validate>
+						</related_products_number>
+					</fields>
+				</related>
+				<cms_blocks translate="label">
+					<label>CMS Blocks Section</label>
+					<comment><![CDATA[You can use the following tags in your CMS blocks which will be replaced with the corresponding data: {{website}}, {{order_date}}, {{order_number}}, {{order_trackingnumber}}, {{customer_firstname}}, {{customer_middlename}}, {{customer_lastname}}, {{customer_fullname}}]]></comment>
+					<frontend_type>text</frontend_type>
+					<sort_order>600</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<cms_blocks_sort translate="label">
+							<label>Section Sort Order</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>601</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<validate>validate-number required-entry</validate>
+						</cms_blocks_sort>
+						<cms_block_1 translate="label">
+							<label>Select CMS Block 1 To Show</label>
+							<frontend_type>select</frontend_type>
+							<source_model>customsuccesspage/config_source_cmsblock</source_model>
+							<sort_order>602</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</cms_block_1>
+						<cms_block_1_size translate="label comment">
+							<label>Select CMS Block 1 Size</label>
+							<comment><![CDATA[show cms block 1 on a full row or as 50% column to be able to align it with cms block 2]]></comment>
+							<frontend_type>select</frontend_type>
+							<source_model>customsuccesspage/config_source_cmsblocksize</source_model>
+							<sort_order>603</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</cms_block_1_size>
+						<cms_block_2 translate="label">
+							<label>Select CMS Block 2 To Show</label>
+							<frontend_type>select</frontend_type>
+							<source_model>customsuccesspage/config_source_cmsblock</source_model>
+							<sort_order>604</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</cms_block_2>
+						<cms_block_2_size translate="label comment">
+							<label>Select CMS Block 2 Size</label>
+							<comment><![CDATA[show cms block 1 on a full row or as 50% column to be able to align it with cms block 3]]></comment>
+							<frontend_type>select</frontend_type>
+							<source_model>customsuccesspage/config_source_cmsblocksize</source_model>
+							<sort_order>605</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</cms_block_2_size>
+						<cms_block_3 translate="label">
+							<label>Select CMS Block 3 To Show</label>
+							<frontend_type>select</frontend_type>
+							<source_model>customsuccesspage/config_source_cmsblock</source_model>
+							<sort_order>606</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</cms_block_3>
+						<cms_block_3_size translate="label comment">
+							<label>Select CMS Block 3 Size</label>
+							<comment><![CDATA[show cms block 1 on a full row or as 50% column to be able to align it with cms block 3]]></comment>
+							<frontend_type>select</frontend_type>
+							<source_model>customsuccesspage/config_source_cmsblocksize</source_model>
+							<sort_order>607</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</cms_block_3_size>
+					</fields>
+				</cms_blocks>
+				<social translate="label">
+					<label>Social Media Integration</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>700</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<social_global translate="label comment">
+							<label>Show Global Social Media Buttons</label>
+							<comment><![CDATA[show social media buttons at the top of the page that share the base url of the website]]></comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>701</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</social_global>
+						<social_global_title_show translate="label comment">
+							<label>Show Title Global Social Media Buttons</label>
+							<comment><![CDATA[show a title in front of the social buttons]]></comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>702</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<social_global>1</social_global>
+							</depends>
+						</social_global_title_show>
+						<social_global_title translate="label">
+							<label>Global Social Media Title</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>703</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<social_global>1</social_global>
+								<social_global_title_show>1</social_global_title_show>
+							</depends>
+						</social_global_title>
+						<social_global_share_text translate="label comment">
+							<label>Global Social Share Text</label>
+							<comment><![CDATA[this is the text used for sharing the website on Twitter and Pinterest, use {{website}} to replace it with the store information website name]]></comment>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>704</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<social_global>1</social_global>
+							</depends>
+						</social_global_share_text>
+						<social_global_image translate="label comment">
+							<label>Global Social Image</label>
+							<comment><![CDATA[this is the image used for sharing the website on Pinterest, for best results upload an image of at least 750px wide]]></comment>
+							<frontend_type>image</frontend_type>
+							<backend_model>adminhtml/system_config_backend_image</backend_model>
+							<upload_dir config="system/filesystem/media" scope_info="1">customsuccesspage</upload_dir>
+							<base_url type="media" scope_info="1">customsuccesspage</base_url>
+							<sort_order>705</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<social_global>1</social_global>
+							</depends>
+						</social_global_image>
+						<social_items_ordered translate="label comment">
+							<label>Show Ordered Items Social Media Buttons</label>
+							<comment><![CDATA[show social media buttons below every ordered item that share the ordered item (will only show if showing ordered items is enabled]]></comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>706</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</social_items_ordered>
+						<social_items_ordered_title_show translate="label comment">
+							<label>Show Title Items Ordered Social Media Buttons</label>
+							<comment><![CDATA[show a title in front of the social buttons]]></comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>707</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<social_items_ordered>1</social_items_ordered>
+							</depends>
+						</social_items_ordered_title_show>
+						<social_items_ordered_title translate="label">
+							<label>Items Ordered Social Media Title</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>708</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								 <social_items_ordered>1</social_items_ordered>
+								<social_items_ordered_title_show>1</social_items_ordered_title_show>
+							</depends>
+						</social_items_ordered_title>
+						<social_items_ordered_share_text translate="label comment">
+							<label>Items Ordered Social Share Text</label>
+							<comment><![CDATA[this is the text used for sharing products on Twitter and Pinterest, use {{website}} to replace it with the store information website name and {{product_name}} with the name of the product]]></comment>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>709</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends>
+								<social_items_ordered>1</social_items_ordered>
+							</depends>
+						</social_items_ordered_share_text>
+						<social_facebook translate="label">
+							<label>Show Facebook Button</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>710</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</social_facebook>
+						<social_twitter translate="label">
+							<label>Show Twitter Button</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>711</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</social_twitter>
+						<social_pinterest translate="label">
+							<label>Show Pinterest Button</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>712</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</social_pinterest>
+						<social_googleplus translate="label">
+							<label>Show Google+ Button</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>713</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</social_googleplus>
+						<social_opengraph translate="label comment">
+							<label>Add Open Graph Meta Tags</label>
+							<comment><![CDATA[Facebook and Pinterest use open graph meta tags when pages are shared, if you have not added these in another way then enable them here to make sure shared pages look nice on facebook and pinterest]]></comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>714</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</social_opengraph>
+					</fields>
+				</social>
+				<feedback>
+					<label>Feedback Form</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>800</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<feedback_intro translate="label comment">
+							<label>Feedback Intro Text</label>
+							<comment><![CDATA[if left empty the default feedback form intro text will be used, you can use the following tags which will be replaced with the corresponding data: {{website}}, {{order_date}}, {{order_number}}, {{order_trackingnumber}}, {{customer_firstname}}, {{customer_middlename}}, {{customer_lastname}}, {{customer_fullname}}]]></comment>
+							<frontend_type>editor</frontend_type>
+							<frontend_model>customsuccesspage/adminhtml_system_config_editor</frontend_model>
+							<sort_order>801</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</feedback_intro>
+					</fields>
+				</feedback>
+			</groups>
+		</customsuccesspage>
+	</sections>
+</config>

@@ -1,0 +1,39 @@
+<?php
+/**
+ * @category	Solide Webservices
+ * @package		CustomSuccessPage
+ */
+?>
+<?php if(Mage::registry('current_product')) { ?>
+<?php $product = Mage::registry('current_product'); ?>
+<meta property="og:title" content="<?php echo ($product->getName()); ?>" />
+<meta property="og:type" content="product" />
+<meta property="og:image" content="<?php echo $this->helper('catalog/image')->init($product, 'small_image')->resize(600,600);?>" />
+<meta property="og:image:width" content="600" />
+<meta property="og:image:height" content="600" />
+<meta property="og:url" content="<?php echo Mage::registry('product')->getProductUrl(); ?>" />
+<meta property="og:description" content="<?php echo strip_tags($product->getMetaDescription()); ?>" />
+<meta property="og:site_name" content="<?php echo Mage::getStoreConfig('general/store_information/name'); ?>" />
+<?php } elseif(Mage::registry('current_category')) { ?>
+<?php
+$_category = Mage::registry('current_category');
+$cur_category = Mage::getModel('catalog/category')->load($_category->getId());
+$imageUrl = $cur_category->getImageUrl();
+?>
+<meta property="og:title" content="<?php echo $this->getLayout()->getBlock('head')->getTitle() ?>" />
+<meta property="og:type" content="website" />
+<?php if($imageUrl) { ?>
+<meta property="og:image" content="<?php echo $imageUrl;?>" />
+<meta property="og:image:width" content="600" />
+<meta property="og:image:height" content="600" />
+<?php } ?>
+<meta property="og:url" content="<?php echo $this->helper('core/url')->getCurrentUrl();?>" />
+<meta property="og:description" content="<?php echo strip_tags($cur_category->getMetaDescription()) ?>" />
+<meta property="og:site_name" content="<?php echo Mage::getStoreConfig('general/store_information/name'); ?>" />
+<?php } else { ?>
+<meta property="og:title" content="<?php echo $this->getLayout()->getBlock('head')->getTitle() ?>" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="<?php echo $this->helper('core/url')->getCurrentUrl();?>" />
+<meta property="og:description" content="<?php echo strip_tags($this->getLayout()->getBlock('head')->getDescription()) ?>" />
+<meta property="og:site_name" content="<?php echo Mage::getStoreConfig('general/store_information/name'); ?>" />
+<?php } ?>

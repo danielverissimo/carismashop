@@ -1,0 +1,36 @@
+<?php
+/**
+ * @category	Solide Webservices
+ * @package		CustomSuccessPage
+ */
+?>
+
+<?php $_order = Mage::helper('customsuccesspage')->returnOrder() ?>
+
+<h2><?php echo Mage::helper('contacts')->__('Feedback') ?></h2>
+<div id="messages_csp_feedback"><?php echo Mage::app()->getLayout()->getMessagesBlock()->setMessages(Mage::getSingleton('customer/session')->getMessages(true))->getGroupedHtml(); ?></div>
+<form action="<?php echo $this->getFormAction(); ?>" id="feedbackForm" method="post">
+	<input type="hidden" name="referer" value="<?php echo Mage::helper('core/url')->getCurrentUrl() ?>" />
+	<input type="hidden" name="name" id="name" value="<?php echo $this->escapeHtml($_order->getCustomerName()) ?>" />
+	<input type="hidden" name="email" id="email" value="<?php echo $this->escapeHtml($_order->getCustomerEmail()) ?>" />
+	<div class="fieldset">
+		<p><?php echo (Mage::getStoreConfig('customsuccesspage/feedback/feedback_intro') ? Mage::helper('customsuccesspage')->enrichShareText('intro', Mage::helper('cms')->getBlockTemplateProcessor()->filter(Mage::getStoreConfig('customsuccesspage/feedback/feedback_intro'))) : $this->__('If you have questions concerning your order or wish to supply us with feedback you can do so below.')); ?></p>
+		<ul class="form-list">
+			<li class="wide">
+				<div class="input-box">
+					<textarea name="comment" id="comment" title="<?php echo Mage::helper('contacts')->__('Comment') ?>" class="required-entry input-text" cols="5" rows="3"></textarea>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div class="buttons-set">
+		<p class="required"><?php echo Mage::helper('contacts')->__('* Required Fields') ?></p>
+		<input type="text" name="hideit" id="hideit" value="" style="display:none !important;" />
+		<button type="submit" title="<?php echo Mage::helper('contacts')->__('Submit') ?>" class="button"><span><span><?php echo Mage::helper('contacts')->__('Submit') ?></span></span></button>
+	</div>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+	var contactForm = new VarienForm('contactForm', false);
+//]]>
+</script>

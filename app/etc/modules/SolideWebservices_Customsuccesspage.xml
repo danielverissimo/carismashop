@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category	Solide Webservices
+ * @package     CustomSuccessPage
+ */
+-->
+
+<config>
+	<modules>
+		<SolideWebservices_Customsuccesspage>
+			<active>true</active>
+			<codePool>community</codePool>
+		</SolideWebservices_Customsuccesspage>
+	</modules>
+</config>

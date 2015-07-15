@@ -1,0 +1,85 @@
+<?php
+/**
+ * @category	Solide Webservices
+ * @package		CustomSuccessPage
+ */
+?>
+<?php  $_order = Mage::helper('customsuccesspage')->returnOrder() ?>
+<table class="data-table linearize-table-large" id="my-orders-table" summary="<?php echo $this->__('Items Ordered') ?>">
+	<col />
+	<col width="1" />
+	<col width="1" />
+	<col width="1" />
+	<col width="1" />
+	<thead>
+		<tr>
+			<th><?php echo $this->__('Product') ?></th>
+			<th><?php echo $this->__('SKU') ?></th>
+			<th class="a-right"><?php echo $this->__('Price') ?></th>
+			<th class="a-center"><?php echo $this->__('Qty') ?></th>
+			<th class="a-right"><?php echo $this->__('Subtotal') ?></th>
+		</tr>
+	</thead>
+	<tfoot>
+		<?php echo $this->getChildHtml('order_totals') ?>
+	</tfoot>
+		<?php $_items = $_order->getItemsCollection(); ?>
+		<?php $_index = 0; ?>
+			<?php $_count = $_items->count(); ?>
+		<?php foreach ($_items as $_item): ?>
+		<?php if ($_item->getParentItem()) continue; ?>
+		<tbody>
+			<?php if(Mage::getStoreConfig('customsuccesspage/social/social_items_ordered')): ?>
+			<?php $current_product = Mage::getModel('catalog/product')->load($_item->getProductId()); ?>
+			<tr>
+				<td class="csp-social-items-ordered" colspan="7">
+					<div class="social-sharing is-clean social-sharing-products" data-permalink="<?php echo $current_product->getProductUrl(); ?>">
+						<?php if(Mage::getStoreConfig('customsuccesspage/social/social_items_ordered_title_show')): ?>
+						<div class="social-sharing-title"><?php echo Mage::getStoreConfig('customsuccesspage/social/social_items_ordered_title') ?></div>
+						<?php endif; ?>
+						<?php if(Mage::getStoreConfig('customsuccesspage/social/social_facebook')): ?>
+						<a target="_blank" href="http://www.facebook.com/sharer.php?u=<?php echo $current_product->getProductUrl(); ?>" class="share-facebook" title="<?php echo $this->__('Share this product on Facebook') ?>">
+							<span class="icon icon-facebook"></span>
+							<span class="share-title"><?php echo $this->__('Share'); ?></span>
+						</a>
+						<?php endif; ?>
+						<?php if(Mage::getStoreConfig('customsuccesspage/social/social_twitter')): ?>
+						<a target="_blank" href="http://twitter.com/share?url=<?php echo $current_product->getProductUrl(); ?>&amp;text=<?php echo Mage::helper('customsuccesspage')->enrichShareText('product', $_item->getProductId()) ?>" class="share-twitter" title="<?php echo $this->__('Tweet about this product on Twitter') ?>">
+							<span class="icon icon-twitter"></span>
+							<span class="share-title"><?php echo $this->__('Tweet'); ?></span>
+						</a>
+						<?php endif; ?>
+						<?php if(Mage::getStoreConfig('customsuccesspage/social/social_pinterest')): ?>
+						<a target="_blank" href="http://pinterest.com/pin/create/button/?url=<?php echo $current_product->getProductUrl(); ?>&amp;media=<?php echo $current_product->getImageUrl() ?>&amp;description=<?php echo Mage::helper('customsuccesspage')->enrichShareText('product', $_item->getProductId()) ?>" class="share-pinterest" title="<?php echo $this->__('Pin this product on Pinterest') ?>">
+							<span class="icon icon-pinterest"></span>
+							<span class="share-title"><?php echo $this->__('Pin It'); ?></span>
+						</a>
+						<?php endif; ?>
+						<?php if(Mage::getStoreConfig('customsuccesspage/social/social_googleplus')): ?>
+						<a target="_blank" href="http://plus.google.com/share?url=<?php echo $current_product->getProductUrl(); ?>" class="share-google" title="<?php echo $this->__('Share this product on Google+') ?>">
+							<span class="icon icon-google"></span>
+							<span class="share-title"><?php echo $this->__('+1'); ?></span>
+						</a>
+						<?php endif ?>
+					</div>
+				</td>
+			</tr>
+			<?php endif ?>
+			<?php echo $this->getItemHtml($_item) ?>
+			<?php if($this->helper('giftmessage/message')->getIsMessagesAvailable('order_item', $_item) && $_item->getGiftMessageId()): ?>
+			<tr class="border<?php echo ($_index++ > $_count ?' last':'') ?>" id="order-item-gift-message-<?php echo $_item->getId() ?>" style="display:none;">
+				<?php $_giftMessage=$this->helper('giftmessage/message')->getGiftMessageForEntity($_item); ?>
+				<td class="gift-message-row" colspan="7">
+					<a href="#" title="<?php echo $this->__('Close') ?>" onclick="return giftMessageToogle('<?php echo $_item->getId() ?>');" class="btn-close"><?php echo $this->__('Close') ?></a>
+					<dl class="gift-message">
+						<dt><strong><?php echo $this->__('From:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getRecipient()) ?></dt>
+						<dt><strong><?php echo $this->__('To:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getSender()) ?></dt>
+						<dd><?php echo $this->helper('giftmessage/message')->getEscapedGiftMessage($_item) ?></dd>
+					</dl>
+				</td>
+			</tr>
+			<?php endif ?>
+		</tbody>
+		<?php endforeach; ?>
+</table>
+<script type="text/javascript">decorateTable('my-orders-table', {'tbody' : ['odd', 'even'], 'tbody tr' : ['first', 'last']})</script>

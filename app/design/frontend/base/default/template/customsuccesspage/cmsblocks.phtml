@@ -1,0 +1,45 @@
+<?php
+/**
+ * @category	Solide Webservices
+ * @package		CustomSuccessPage
+ */
+?>
+<?php if(Mage::getStoreConfig('customsuccesspage/cms_blocks/cms_block_1')!='none' || Mage::getStoreConfig('customsuccesspage/cms_blocks/cms_block_2')!='none' || Mage::getStoreConfig('customsuccesspage/cms_blocks/cms_block_3')!='none'): ?>
+<div class="csp-section csp-cms-blocks">
+	<div class="csp-row">
+		<?php if(Mage::getStoreConfig('customsuccesspage/cms_blocks/cms_block_1')!='none'): ?>
+		<div class="csp-col-<?php echo Mage::getStoreConfig('customsuccesspage/cms_blocks/cms_block_1_size'); ?>">
+			<?php if(Mage::getStoreConfig('customsuccesspage/cms_blocks/cms_block_1')=='summary') { ?>
+				<?php echo $this->getLayout()->createBlock('customsuccesspage/success')->setBlockId('csp.summary')->setTemplate('customsuccesspage/summary.phtml')->toHtml(); ?>
+			<?php } elseif(Mage::getStoreConfig('customsuccesspage/cms_blocks/cms_block_1')=='form') { ?>
+				<?php echo $this->getLayout()->createBlock('customsuccesspage/success')->setBlockId('csp.feedback')->setFormAction('/contacts/index/post')->setTemplate('customsuccesspage/form.phtml')->toHtml(); ?>
+			<?php } else { ?>
+				<?php echo Mage::helper('customsuccesspage')->enrichShareText('cmsblock', 'customsuccesspage/cms_blocks/cms_block_1') ?>
+			<?php } ?>
+		</div>
+		<?php endif; ?>
+		<?php if(Mage::getStoreConfig('customsuccesspage/cms_blocks/cms_block_2')!='none'): ?>
+		<div class="csp-col-<?php echo Mage::getStoreConfig('customsuccesspage/cms_blocks/cms_block_2_size'); ?>">
+			<?php if(Mage::getStoreConfig('customsuccesspage/cms_blocks/cms_block_2')=='summary') { ?>
+				<?php echo $this->getLayout()->createBlock('customsuccesspage/success')->setBlockId('csp.summary')->setTemplate('customsuccesspage/summary.phtml')->toHtml(); ?>
+			<?php } elseif(Mage::getStoreConfig('customsuccesspage/cms_blocks/cms_block_2')=='form') { ?>
+				<?php echo $this->getLayout()->createBlock('customsuccesspage/success')->setBlockId('csp.feedback')->setFormAction('/contacts/index/post')->setTemplate('customsuccesspage/form.phtml')->toHtml(); ?>
+			<?php } else { ?>
+				<?php echo Mage::helper('customsuccesspage')->enrichShareText('cmsblock', 'customsuccesspage/cms_blocks/cms_block_2') ?>
+			<?php } ?>
+		</div>
+		<?php endif; ?>
+		<?php if(Mage::getStoreConfig('customsuccesspage/cms_blocks/cms_block_3')!='none'): ?>
+		<div class="csp-col-<?php echo Mage::getStoreConfig('customsuccesspage/cms_blocks/cms_block_3_size'); ?>">
+			<?php if(Mage::getStoreConfig('customsuccesspage/cms_blocks/cms_block_3')=='summary') { ?>
+				<?php echo $this->getLayout()->createBlock('customsuccesspage/success')->setBlockId('csp.summary')->setTemplate('customsuccesspage/summary.phtml')->toHtml(); ?>
+			<?php } elseif(Mage::getStoreConfig('customsuccesspage/cms_blocks/cms_block_3')=='form') { ?>
+				<?php echo $this->getLayout()->createBlock('customsuccesspage/success')->setBlockId('csp.feedback')->setFormAction('/contacts/index/post')->setTemplate('customsuccesspage/form.phtml')->toHtml(); ?>
+			<?php } else { ?>
+				<?php echo Mage::helper('customsuccesspage')->enrichShareText('cmsblock', 'customsuccesspage/cms_blocks/cms_block_3') ?>
+			<?php } ?>
+		</div>
+		<?php endif; ?>
+	</div>
+</div>
+<?php endif; ?>

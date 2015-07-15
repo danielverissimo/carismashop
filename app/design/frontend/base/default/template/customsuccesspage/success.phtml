@@ -1,0 +1,99 @@
+<?php
+/**
+ * @category	Solide Webservices
+ * @package		CustomSuccessPage
+ */
+?>
+<div class="page-title">
+	<h1><?php echo (Mage::getStoreConfig('customsuccesspage/general/pagetitle') ? Mage::getStoreConfig('customsuccesspage/general/pagetitle') : $this->__('Your order has been received.')); ?></h1>
+	<?php if(Mage::getStoreConfig('customsuccesspage/social/social_global')): ?>
+	<div class="social-sharing is-clean social-sharing-global" data-permalink="<?php echo Mage::getBaseUrl(); ?>">
+		<?php if(Mage::getStoreConfig('customsuccesspage/social/social_global_title_show')): ?>
+		<div class="social-sharing-title"><?php echo Mage::getStoreConfig('customsuccesspage/social/social_global_title') ?></div>
+		<?php endif; ?>
+		<?php if(Mage::getStoreConfig('customsuccesspage/social/social_facebook')): ?>
+		<a target="_blank" href="http://www.facebook.com/sharer.php?u=<?php echo Mage::getBaseUrl(); ?>" class="share-facebook" title="<?php echo $this->__('Share this product on Facebook') ?>">
+			<span class="icon icon-facebook"></span>
+			<span class="share-title"><?php echo $this->__('Share'); ?></span>
+			<span class="share-count">0</span>
+		</a>
+		<?php endif; ?>
+		<?php if(Mage::getStoreConfig('customsuccesspage/social/social_twitter')): ?>
+		<a target="_blank" href="http://twitter.com/share?url=<?php echo Mage::getBaseUrl(); ?>&amp;text=<?php echo Mage::helper('customsuccesspage')->enrichShareText('website') ?>" class="share-twitter" title="<?php echo $this->__('Tweet about this product on Twitter') ?>">
+			<span class="icon icon-twitter"></span>
+			<span class="share-title"><?php echo $this->__('Tweet'); ?></span>
+			<span class="share-count">0</span>
+		</a>
+		<?php endif; ?>
+		<?php if(Mage::getStoreConfig('customsuccesspage/social/social_pinterest')): ?>
+		<a target="_blank" href="http://pinterest.com/pin/create/button/?url=<?php echo Mage::getBaseUrl(); ?><?php if(Mage::getStoreConfig('customsuccesspage/social/social_global_image')): ?>&amp;media=<?php echo Mage::getBaseUrl('media') . Mage::getStoreConfig('customsuccesspage/social/social_global_image'); endif; ?>&amp;description=<?php echo Mage::helper('customsuccesspage')->enrichShareText('website') ?>" class="share-pinterest" title="<?php echo $this->__('Pin this product on Pinterest') ?>">
+			<span class="icon icon-pinterest"></span>
+			<span class="share-title"><?php echo $this->__('Pin It'); ?></span>
+			<span class="share-count">0</span>
+		</a>
+		<?php endif; ?>
+		<?php if(Mage::getStoreConfig('customsuccesspage/social/social_googleplus')): ?>
+		<a target="_blank" href="http://plus.google.com/share?url=<?php echo Mage::getBaseUrl(); ?>" class="share-google" title="<?php echo $this->__('Share this product on Google+') ?>">
+			<span class="icon icon-google"></span>
+			<span class="share-title"><?php echo $this->__('+1'); ?></span>
+			<span class="share-count">0</span>
+		</a>
+		<?php endif; ?>
+	</div>
+	<?php endif; ?>
+</div>
+<?php echo $this->getMessagesBlock()->toHtml() ?>
+<div class="csp-section col2-set csp-summary">
+	<div class="col-1">
+		<div class="content">
+			<?php if($this->getOrderId() && !Mage::getStoreConfig('customsuccesspage/general/intro')) { ?>
+			<p><?php echo $this->__('You will receive an order confirmation email with details of your order and a link to track its progress.') ?></p>
+			<?php } elseif($this->getOrderId() && Mage::getStoreConfig('customsuccesspage/general/intro')) { ?>
+			<p><?php echo Mage::helper('customsuccesspage')->enrichShareText('intro', Mage::helper('cms')->getBlockTemplateProcessor()->filter(Mage::getStoreConfig('customsuccesspage/general/intro'))) ?></p>
+			<?php } ?>
+			<?php if ($this->getAgreementRefId()): ?>
+			<p><?php echo $this->__('Your billing agreement # is: %s.', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getAgreementUrl()), $this->escapeHtml($this->getAgreementRefId())))?></p>
+			<?php endif;?>
+			<?php if ($profiles = $this->getRecurringProfiles()):?>
+			<p><?php echo $this->__('Your recurring payment profiles:'); ?></p>
+			<ul class="disc">
+			<?php foreach($profiles as $profile):?>
+			<?php $profileIdHtml = ($this->getCanViewProfiles() ? sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getProfileUrl($profile)), $this->escapeHtml($this->getObjectData($profile, 'reference_id'))) : $this->escapeHtml($this->getObjectData($profile, 'reference_id')));?>
+			<li><?php echo $this->__('Payment profile # %s: "%s".', $profileIdHtml, $this->escapeHtml($this->getObjectData($profile, 'schedule_description')))?></li>
+			<?php endforeach;?>
+			</ul>
+			<?php endif; ?>
+			<?php if(Mage::getStoreConfig('customsuccesspage/newsletter/newsletter_position')=="intro_text"): ?>
+			<?php echo $this->getChildHtml('csp.newsletter') ?>
+			<?php endif; ?>
+		</div>
+	</div>
+	<div class="col-2">
+		<div class="content">
+			<?php if($this->getCanPrintOrder() && Mage::getStoreConfig('customsuccesspage/general/print_order')) : ?>
+			<div class="csp-print-order"><a href="<?php echo $this->getPrintUrl() ?>" title="<?php echo $this->__('Print'); ?>"></a></div>
+			<?php endif;?>
+			<?php if(Mage::getStoreConfig('customsuccesspage/general/summary_block')!='none' && Mage::getStoreConfig('customsuccesspage/general/summary_block')=='summary') { ?>
+			<?php echo $this->getLayout()->createBlock('customsuccesspage/success')->setBlockId('csp.summary')->setTemplate('customsuccesspage/summary.phtml')->toHtml(); ?>
+			<?php } elseif(Mage::getStoreConfig('customsuccesspage/general/summary_block')=='form') { ?>
+			<?php echo $this->getLayout()->createBlock('customsuccesspage/success')->setBlockId('csp.feedback')->setFormAction('/contacts/index/post')->setTemplate('customsuccesspage/form.phtml')->toHtml(); ?>
+			<?php } else { ?>
+			<?php echo Mage::helper('customsuccesspage')->enrichShareText('cmsblock', 'customsuccesspage/general/summary_block') ?>
+			<?php } ?>
+		</div>
+	</div>
+</div>
+
+<?php
+$sections = Mage::helper('customsuccesspage')->sortSections();
+foreach ($sections as $key => $val) {
+	echo $this->getChildHtml($key);
+}
+?>
+
+<div class="buttons-set csp-section<?php if(Mage::getStoreConfig('customsuccesspage/newsletter/newsletter_position')=="bottom"): ?> csp-newsletter<?php endif; ?>">
+	<?php if(Mage::getStoreConfig('customsuccesspage/newsletter/newsletter_position')=="bottom"): ?>
+	<?php echo $this->getChildHtml('csp.newsletter') ?>
+	<?php endif; ?>
+	<button type="button" class="button" title="<?php echo $this->__('Continue Shopping') ?>" onclick="window.location='<?php echo (Mage::getStoreConfig('customsuccesspage/general/continue_url') ? Mage::getStoreConfig('customsuccesspage/general/continue_url') : $this->getUrl()) ?>'"><span><span><?php echo $this->__('Continue Shopping') ?></span></span></button>
+</div>

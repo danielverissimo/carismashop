@@ -1,0 +1,105 @@
+<?php
+/**
+ * @category	Solide Webservices
+ * @package		CustomSuccessPage
+ */
+?>
+
+<?php $_order = Mage::helper('customsuccesspage')->returnOrder() ?>
+
+<div class="col2-set order-info-box csp-summary-details">
+	<div class="col-1">
+		<div class="box">
+			<div class="box-title">
+				<h2><?php echo $this->__('Order Date') ?></h2>
+			</div>
+			<div class="box-content">
+				<?php echo $_order->getCreatedAtStoreDate()->toString(Varien_Date::DATETIME_INTERNAL_FORMAT); ?>
+			</div>
+		</div>
+	</div>
+	<div class="col-2">
+		<?php if(Mage::getStoreConfig('customsuccesspage/general/show_order_number')) { ?>
+		<div class="box">
+			<div class="box-title">
+				<h2><?php echo $this->__('Order Number') ?></h2>
+			</div>
+			<div class="box-content">
+			<?php if ($this->getCanViewOrder()) :?>
+				<?php echo $this->__('#%s', sprintf('<a href="%s">%s</a>', $this->escapeHtml($this->getViewOrderUrl()), $this->escapeHtml($this->getOrderId()))) ?>
+			<?php  else :?>
+				<?php echo $this->__('#%s', $this->escapeHtml($this->getOrderId())) ?>
+			<?php endif;?>
+			</div>
+		</div>
+		<?php } else { ?>
+		<div class="box">
+			<div class="box-title">
+				<h2><?php echo $this->__('Total') ?></h2>
+			</div>
+			<div class="box-content">
+				<?php echo Mage::helper('core')->currency($_order->getGrandTotal(), true, false); ?>
+			</div>
+		</div>
+		<?php } ?>
+	</div>
+</div>
+<?php if (!$_order->getIsVirtual()): ?>
+<div class="col2-set order-info-box csp-summary-details">
+	<div class="col-1">
+		<div class="box">
+			<div class="box-title">
+				<h2><?php echo $this->__('Shipping Address') ?></h2>
+			</div>
+			<div class="box-content">
+				<address><?php echo $_order->getShippingAddress()->format('html') ?></address>
+			</div>
+		</div>
+	</div>
+	<div class="col-2">
+		<div class="box">
+			<div class="box-title">
+				<h2><?php echo $this->__('Shipping Method') ?></h2>
+			</div>
+			<div class="box-content">
+				<?php if ($_order->getShippingDescription()): ?>
+					<?php echo $this->escapeHtml($_order->getShippingDescription()) ?>
+				<?php else: ?>
+					<p><?php echo $this->__('No shipping information available'); ?></p>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+</div>
+<?php endif; ?>
+<div class="col2-set order-info-box csp-summary-details">
+	<div class="col-1">
+		<div class="box">
+			<div class="box-title">
+				<h2><?php echo $this->__('Billing Address') ?></h2>
+			</div>
+			<div class="box-content">
+				<address><?php echo $_order->getBillingAddress()->format('html') ?></address>
+			</div>
+		</div>
+	</div>
+	<div class="col-2">
+		<div class="box box-payment">
+			<div class="box-title">
+				<h2><?php echo $this->__('Payment Method') ?></h2>
+			</div>
+			<div class="box-content">
+				<?php echo Mage::helper('payment')->getInfoBlock($_order->getPayment())->setIsSecureMode(true)->toHtml();  ?>
+			</div>
+			<?php if(Mage::getStoreConfig('customsuccesspage/general/show_order_number')) : ?>
+			<div class="box-title csp-summary-total">
+				<h2><?php echo $this->__('Total') ?></h2>
+			</div>
+			<div class="box-content csp-summary-total">
+				<?php echo Mage::helper('core')->currency($_order->getGrandTotal(), true, false); ?>
+			</div>
+			<?php endif; ?>
+		</div>
+	</div>
+</div>
+

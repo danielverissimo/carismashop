@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<layout>
+<!--
+/**
+ * @category	Solide Webservices
+ * @package     CustomSuccessPage
+ */
+-->
+	<default>
+		<reference name="root">
+			<block type="customsuccesspage/page_html_opengraph" name="customsuccesspage_opengraph" as="customsuccesspage_opengraph"/>
+		</reference>
+	</default>
+
+	<checkout_onepage_success translate="label">
+		<label>One Page Checkout Success</label>
+
+		<reference name="root">
+			<block type="customsuccesspage/page_html_head" name="customsuccesspage_head" as="customsuccesspage_head"/>
+		</reference>
+
+		<reference name="checkout.success">
+			<action method="setTemplate" ifconfig="customsuccesspage/configuration/enabled"><template>customsuccesspage/success.phtml</template></action>
+			<block type="core/text_list" name="csp.newsletter" as="csp.newsletter" translate="label">
+					<label>Custom Success Page Newsletter</label>
+			</block>
+			<block type="core/text_list" name="csp.items.ordered" as="csp.items.ordered" translate="label">
+					<label>Custom Success Page Items Ordered</label>
+			</block>
+			<block type="core/text_list" name="csp.related.products" as="csp.related.products" translate="label">
+					<label>Custom Success Page Related Products</label>
+			</block>
+			<block type="core/text_list" name="csp.cms.blocks" as="csp.cms.blocks" translate="label">
+					<label>Custom Success Page CMS Blocks</label>
+			</block>
+		</reference>
+
+		<!-- // Custom Success Page Newsletter -->
+		<reference name="csp.newsletter">
+			<block type="newsletter/subscribe" name="newsletter" as="newsletter">
+				<action method="setTemplate" ifconfig="customsuccesspage/newsletter/newsletter_show"><template>customsuccesspage/subscribe.phtml</template></action>
+			</block>
+		</reference>
+		<!-- // Custom Success Page Newsletter -->
+
+		<!-- Custom Success Page Items Ordered -->
+		<reference name="csp.items.ordered">
+			<block type="customsuccesspage/items" name="sales.order.view">
+				<action method="setTemplate"><template>customsuccesspage/itemsordered.phtml</template></action>
+				<block type="sales/order_items" name="order_items" template="customsuccesspage/items.phtml">
+					<action method="addItemRender"><type>default</type><block>sales/order_item_renderer_default</block><template>sales/order/items/renderer/default.phtml</template></action>
+					<action method="addItemRender"><type>grouped</type><block>sales/order_item_renderer_grouped</block><template>sales/order/items/renderer/default.phtml</template></action>
+					<block type="customsuccesspage/totals" name="order_totals">
+						<action method="setTemplate" ifconfig="customsuccesspage/ordered/items_ordered_totals"><template>sales/order/totals.phtml</template></action>
+						<action method="setLabelProperties"><value>colspan="4" class="a-right"</value></action>
+						<action method="setValueProperties"><value>class="last a-right"</value></action>
+						<block type="tax/sales_order_tax" name="tax" template="tax/order/tax.phtml" />
+					</block>
+				</block>
+			</block>
+		</reference>
+		<!-- // Custom Success Page Items Ordered -->
+
+		<!-- // Custom Success Page Related Products -->
+		<reference name="csp.related.products">
+			<block type="customsuccesspage/related" name="csp.related.products.block">
+				<action method="setTemplate" ifconfig="customsuccesspage/related/related_products"><template>customsuccesspage/related.phtml</template></action>
+			</block>
+		</reference>
+		<!-- // Custom Success Page Related Products -->
+
+		<!-- // Custom Success Page CMS Blocks -->
+		<reference name="csp.cms.blocks">
+			<block type="customsuccesspage/success" name="csp.cms.blocks.block">
+				<action method="setTemplate"><template>customsuccesspage/cmsblocks.phtml</template></action>
+			</block>
+		</reference>
+		<!-- // Custom Success Page CMS Blocks -->
+
+	</checkout_onepage_success>
+
+</layout>
