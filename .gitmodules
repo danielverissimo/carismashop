@@ -1,3 +1,0 @@
-[submodule "app/code/community/Cammino/Clearsale"]
-	path = app/code/community/Cammino/Clearsale
-	url = git@github.com:mferracioli/magento-clearsale.git
