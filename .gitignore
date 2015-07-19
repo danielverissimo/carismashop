@@ -8,3 +8,4 @@ downloader/
 !*/.htaccess
 .htpasswd
 .modgit/
+.gitmodules
