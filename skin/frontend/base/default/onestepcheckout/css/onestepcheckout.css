@@ -92,3 +92,22 @@
 .onestepcheckout-popup-accept button{background: #eee;height: 30px;width: 150px;border: 1px solid #aaa;color: #555;font-size: 16px;cursor: pointer;}
 .onestepcheckout-popup-accept button:hover{background: #ddd;border: 1px solid #999;}
 .onestepcheckout-popup-accept a{float: right;margin-right: 16px;font-size: 20px;margin-top: 5px;}
+
+@media only screen and (max-width: 770px) {
+    .col3-set .col-1, .col3-set .col-2, .col3-set .col-3{
+        float: none;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+}
+@media only screen and (max-width: 479px) {
+    .col3-set .col-1, .col3-set .col-2, .col3-set .col-3{
+        float: none;
+        width: auto;
+        border: 0;
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
